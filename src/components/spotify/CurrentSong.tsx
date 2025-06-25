@@ -45,7 +45,7 @@ interface CurrentSongProps {
   data: SpotifyData | null;
 }
 
-export function CurrentSong({error, data }: CurrentSongProps) {
+export function CurrentSong({ error, data }: CurrentSongProps) {
   if (error) {
     return <ErrorState error={error} />;
   }
