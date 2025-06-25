@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { generateChatResponse } from "@/lib/gemini";
+import { ChatApiMessage } from "@/types/chat";
 
 export async function POST(request: Request) {
   try {
@@ -21,7 +22,7 @@ export async function POST(request: Request) {
     }
 
     // Validate message format
-    const isValidMessage = (msg: any) =>
+    const isValidMessage = (msg: ChatApiMessage) =>
       msg.role &&
       (msg.role === "user" || msg.role === "model") &&
       typeof msg.content === "string";

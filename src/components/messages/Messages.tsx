@@ -14,7 +14,7 @@ export function Messages() {
 
   return (
     <div className="flex h-full bg-white">
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col max-h-[calc(100vh-2rem)] md:max-h-full">
         <ChatHeader recipientName={CHAT_CONFIG.recipientName} />
 
         <MessageList messages={chatState.messages} onRetry={retryMessage} />

@@ -1,5 +1,4 @@
 import { useState, useCallback } from "react";
-import { Message, ChatState } from "@/types/chat";
 import {
   createWelcomeMessage,
   createUserMessage,
@@ -7,6 +6,7 @@ import {
   filterChatHistory,
   updateMessageStatus,
 } from "@/lib/chat-utils";
+import { ChatState } from "@/types/chat";
 
 interface UseChatReturn {
   chatState: ChatState;

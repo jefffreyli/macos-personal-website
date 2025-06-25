@@ -44,7 +44,6 @@ export function WindowManager({
       const window = windows.find((w) => w.id === windowId);
       if (!window) return;
 
-      const rect = e.currentTarget.getBoundingClientRect();
       setDragState({
         isDragging: true,
         windowId,
@@ -104,36 +103,46 @@ export function WindowManager({
             key={window.id}
             className={cn(
               "fixed bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden",
-              window.isMaximized ? "inset-4" : ""
+              window.isMaximized ? "inset-0" : ""
             )}
             style={{
-              left: window.isMaximized ? undefined : window.position.x,
-              top: window.isMaximized ? undefined : window.position.y,
-              width: window.isMaximized ? undefined : window.size.width,
-              height: window.isMaximized ? undefined : window.size.height,
-              zIndex: window.zIndex,
+              left: window.isMaximized ? 0 : window.position.x,
+              top: window.isMaximized ? 0 : window.position.y,
+              width: window.isMaximized ? "100%" : window.size.width,
+              height: window.isMaximized ? "100%" : window.size.height,
+              zIndex: window.zIndex + 50, // Ensure windows are always above other elements
             }}
           >
             {/* Window Header */}
             <div
-              className="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-200 cursor-move"
+              className="flex items-center justify-between px-2 md:px-4 py-2 md:py-3 bg-gray-50 border-b border-gray-200 cursor-move"
               onMouseDown={(e) => handleMouseDown(e, window.id)}
+              onTouchStart={(e) => {
+                const touch = e.touches[0];
+                handleMouseDown(
+                  {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY,
+                  } as React.MouseEvent,
+                  window.id
+                );
+              }}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 md:gap-2">
                 {/* Traffic Light Buttons */}
                 <button
                   onClick={() => onWindowClose(window.id)}
-                  className="w-3 h-3 bg-red-500 rounded-full hover:bg-red-600 flex items-center justify-center group"
+                  className="w-2 h-2 md:w-3 md:h-3 bg-red-500 rounded-full hover:bg-red-600 flex items-center justify-center group"
                 >
-                  <X className="w-2 h-2 text-red-800 opacity-0 group-hover:opacity-100" />
+                  <X className="w-1.5 h-1.5 md:w-2 md:h-2 text-red-800 opacity-0 group-hover:opacity-100" />
                 </button>
                 <button
                   onClick={() =>
                     onWindowUpdate(window.id, { isMinimized: true })
                   }
-                  className="w-3 h-3 bg-yellow-500 rounded-full hover:bg-yellow-600 flex items-center justify-center group"
+                  className="w-2 h-2 md:w-3 md:h-3 bg-yellow-500 rounded-full hover:bg-yellow-600 flex items-center justify-center group"
                 >
-                  <Minus className="w-2 h-2 text-yellow-800 opacity-0 group-hover:opacity-100" />
+                  <Minus className="w-1.5 h-1.5 md:w-2 md:h-2 text-yellow-800 opacity-0 group-hover:opacity-100" />
                 </button>
                 <button
                   onClick={() =>
@@ -141,19 +150,19 @@ export function WindowManager({
                       isMaximized: !window.isMaximized,
                     })
                   }
-                  className="w-3 h-3 bg-green-500 rounded-full hover:bg-green-600 flex items-center justify-center group"
+                  className="w-2 h-2 md:w-3 md:h-3 bg-green-500 rounded-full hover:bg-green-600 flex items-center justify-center group"
                 >
-                  <Square className="w-2 h-2 text-green-800 opacity-0 group-hover:opacity-100" />
+                  <Square className="w-1.5 h-1.5 md:w-2 md:h-2 text-green-800 opacity-0 group-hover:opacity-100" />
                 </button>
               </div>
-              <h3 className="text-sm font-medium text-gray-700 flex-1 text-center">
+              <h3 className="text-xs md:text-sm font-medium text-gray-700 flex-1 text-center">
                 {window.title}
               </h3>
-              <div className="w-16" /> {/* Spacer for centering */}
+              <div className="w-12 md:w-16" /> {/* Spacer for centering */}
             </div>
 
             {/* Window Content */}
-            <div className="flex-1 h-[calc(100%-44px)] overflow-hidden">
+            <div className="flex-1 h-[calc(100%-36px)] md:h-[calc(100%-44px)] overflow-hidden">
               <div className="h-full overflow-y-auto">{window.content}</div>
             </div>
           </div>

@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Photo } from "@/types/photos";
-import { photos } from "@/components/photos/photos";
+import { photos } from "@/components/photos/photo-library";
+import Image from "next/image";
 
 export function Photos() {
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
@@ -49,9 +50,7 @@ export function Photos() {
             <div className="font-medium">
               {selectedPhoto.location || selectedPhoto.title}
             </div>
-            <div className="text-sm opacity-75">
-              {selectedPhoto.date}
-            </div>
+            <div className="text-sm opacity-75">{selectedPhoto.date}</div>
           </div>
           <div className="w-[76px]"></div>{" "}
           {/* Spacer to balance the left button */}
@@ -67,14 +66,15 @@ export function Photos() {
           </button>
 
           <div className="relative w-full h-full flex items-center justify-center">
-            <img
+            <Image
               src={selectedPhoto.src || "/placeholder.svg"}
               alt={selectedPhoto.title}
               className="max-h-full max-w-full object-contain"
+              fill
               style={{
-                width: "auto",
-                height: "auto",
+                objectFit: "contain",
               }}
+              priority
             />
           </div>
 
@@ -102,10 +102,14 @@ export function Photos() {
                 className="aspect-square cursor-pointer group relative overflow-hidden rounded-lg bg-gray-100"
                 onClick={() => openPhoto(photo)}
               >
-                <img
+                <Image
                   src={photo.src || "/placeholder.svg"}
                   alt={photo.title}
                   className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                  fill
+                  style={{
+                    objectFit: "cover",
+                  }}
                 />
               </div>
             ))}

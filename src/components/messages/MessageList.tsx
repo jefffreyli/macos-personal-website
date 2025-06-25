@@ -19,7 +19,7 @@ export function MessageList({ messages, onRetry }: MessageListProps) {
   }, [messages]);
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-4">
+    <div className="flex-1 overflow-y-auto p-2 md:p-4 space-y-2 md:space-y-4">
       {messages.map((message) => (
         <MessageItem key={message.id} message={message} onRetry={onRetry} />
       ))}
