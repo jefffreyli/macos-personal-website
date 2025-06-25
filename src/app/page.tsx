@@ -1,103 +1,137 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { Sidebar } from "@/components/notes/Sidebar";
+import { NoteEditor } from "@/components/notes/NoteEditor";
+import { Note } from "@/types/note";
+import { sampleNotes } from "@/components/notes/note-text/about-me";
+import { Dock } from "@/components/dock/Dock";
+import { WindowManager, WindowState } from "@/components/WindowManager";
+import { Finder } from "@/components/finder/Finder";
+import { Photos } from "@/components/photos/Photos";
+import { Spotify } from "@/components/spotify/Spotify";
+import { Messages } from "@/components/messages/Messages";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [notes, setNotes] = useState<Note[]>(sampleNotes);
+  const [selectedNote, setSelectedNote] = useState<Note>(sampleNotes[0]);
+  const [windows, setWindows] = useState<WindowState[]>([]);
+  const [nextZIndex, setNextZIndex] = useState(1);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  const openWindow = (
+    appId: string,
+    title: string,
+    content: React.ReactNode
+  ) => {
+    const existingWindow = windows.find((w) => w.id === appId);
+    if (existingWindow) {
+      setWindows((prev) =>
+        prev.map((w) =>
+          w.id === appId
+            ? { ...w, isOpen: true, isMinimized: false, zIndex: nextZIndex }
+            : w
+        )
+      );
+      setNextZIndex((prev) => prev + 1);
+      return;
+    }
+
+    const newWindow: WindowState = {
+      id: appId,
+      title,
+      isOpen: true,
+      isMinimized: false,
+      isMaximized: false,
+      position: { x: 100 + windows.length * 30, y: 100 + windows.length * 30 },
+      size: { width: 900, height: 600 },
+      zIndex: nextZIndex,
+      content,
+    };
+
+    setWindows((prev) => [...prev, newWindow]);
+    setNextZIndex((prev) => prev + 1);
+  };
+
+  const updateWindow = (windowId: string, updates: Partial<WindowState>) => {
+    setWindows((prev) =>
+      prev.map((w) => (w.id === windowId ? { ...w, ...updates } : w))
+    );
+  };
+
+  const closeWindow = (windowId: string) => {
+    setWindows((prev) =>
+      prev.map((w) => (w.id === windowId ? { ...w, isOpen: false } : w))
+    );
+  };
+
+  const dockApps = [
+    {
+      id: "finder",
+      name: "Finder",
+      icon: "https://upload.wikimedia.org/wikipedia/commons/c/c9/Finder_Icon_macOS_Big_Sur.png",
+      onClick: () => {
+        openWindow("finder", "Finder", <Finder />);
+      },
+    },
+    {
+      id: "note",
+      name: "Note",
+      icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_Notes_icon.svg/240px-Apple_Notes_icon.svg.png?20220520065014",
+      onClick: () => {},
+    },
+    {
+      id: "spotify",
+      name: "Spotify",
+      icon: "https://upload.wikimedia.org/wikipedia/commons/9/9b/Spotify_1.png",
+      onClick: () => {
+        openWindow("spotify", "Spotify", <Spotify />);
+      },
+    },
+    {
+      id: "mail",
+      name: "Mail",
+      icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Mail_%28iOS%29.svg/1200px-Mail_%28iOS%29.svg.png?20141024222707",
+      onClick: () => {
+        window.open("mailto:jeffreyli8000@gmail.com", "_self");
+      },
+    },
+    {
+      id: "photos",
+      name: "Photos",
+      icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Foto_%28iOS%29.png/500px-Foto_%28iOS%29.png",
+      onClick: () => {
+        openWindow("photos", "Photos", <Photos />);
+      },
+    },
+    {
+      id: "messages",
+      name: "Messages",
+      icon: "https://upload.wikimedia.org/wikipedia/commons/5/51/IMessage_logo.svg",
+      onClick: () => {
+        openWindow("messages", "Messages", <Messages />);
+      },
+    },
+  ];
+
+  const handleNoteSelect = (note: Note) => {
+    setNotes((prev) =>
+      prev.map((n) => ({ ...n, isSelected: n.id === note.id }))
+    );
+    setSelectedNote(note);
+  };
+
+  return (
+    <div className="flex h-screen bg-gray-50">
+      <Sidebar notes={notes} onNoteSelect={handleNoteSelect} />
+      <div className="flex-1">
+        <NoteEditor note={selectedNote} />
+      </div>
+      <WindowManager
+        windows={windows}
+        onWindowUpdate={updateWindow}
+        onWindowClose={closeWindow}
+      />
+      <Dock apps={dockApps} />
     </div>
   );
 }
