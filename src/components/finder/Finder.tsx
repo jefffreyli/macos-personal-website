@@ -13,6 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 export function Finder() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -123,9 +124,10 @@ export function Finder() {
 
         {/* File List */}
         <div className="flex-1 p-2 md:p-4">
-          <a
-            href="/Li_Jeffrey_Resume.docx.pdf"
-            download="Jeffrey Li Resume.pdf"
+          <Link
+            href="/resume"
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex items-center gap-2 md:gap-3 p-1.5 md:p-2 hover:bg-gray-100 rounded cursor-pointer"
           >
             <File className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
@@ -141,7 +143,7 @@ export function Finder() {
             <div className="hidden md:block w-40 text-xs md:text-sm text-gray-500">
               Jun 23, 2025
             </div>
-          </a>
+          </Link>
         </div>
       </div>
     </div>
