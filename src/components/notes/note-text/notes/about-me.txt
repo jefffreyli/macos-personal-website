@@ -1,0 +1,16 @@
+currently
+- building casava
+- software development engineer intern at AWS working on Fargate (serverless compute engine).
+- rising junior at MIT studying computer science + engineering (6-3)
+
+previously
+- liquid handling robotic automation research at mit media lab
+- director at the silicon project
+- wet lab research at memorial sloan kettering cancer center (mskcc)
+
+skills & interests
+- AI and automation
+- aws/cloud computing
+
+reach out
+- email: [jeffreyli8000@gmail.com](mailto:jeffreyli8000@gmail.com)

@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sidebar } from "@/components/notes/Sidebar";
 import { NoteEditor } from "@/components/notes/NoteEditor";
 import { Note } from "@/types/note";
-import { sampleNotes } from "@/components/notes/note-text/about-me";
+import {
+  sampleNotes,
+  fetchNotes,
+} from "@/components/notes/note-text/note-text";
 import { Dock } from "@/components/dock/Dock";
 import { WindowManager, WindowState } from "@/components/WindowManager";
 import { Finder } from "@/components/finder/Finder";
@@ -17,6 +20,24 @@ export default function Home() {
   const [selectedNote, setSelectedNote] = useState<Note>(sampleNotes[0]);
   const [windows, setWindows] = useState<WindowState[]>([]);
   const [nextZIndex, setNextZIndex] = useState(1);
+
+  // Fetch notes from API when component mounts
+  useEffect(() => {
+    const loadNotes = async () => {
+      try {
+        const fetchedNotes = await fetchNotes();
+        setNotes(fetchedNotes);
+        if (fetchedNotes.length > 0) {
+          setSelectedNote(fetchedNotes[0]);
+        }
+      } catch (error) {
+        console.error("Failed to load notes:", error);
+        // Keep using sampleNotes as fallback
+      }
+    };
+
+    loadNotes();
+  }, []);
 
   const openWindow = (
     appId: string,

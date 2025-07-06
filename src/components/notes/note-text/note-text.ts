@@ -14,7 +14,7 @@ export async function fetchNotes(): Promise<Note[]> {
       {
         id: "1",
         title: "📍 about me",
-        content: "Loading...",
+        content: "Typing...",
         date: "7/5/2025",
         preview: "currently...",
         isPinned: true,
@@ -23,12 +23,35 @@ export async function fetchNotes(): Promise<Note[]> {
       {
         id: "2",
         title: "🔗 quick links",
-        content: "Loading...",
+        content: "Typing...",
         date: "7/5/2025",
-        preview: "useful links...",
+        preview: "useful links",
         isPinned: false,
         isSelected: false,
       },
     ];
   }
 }
+
+// For backward compatibility, export a default set of notes
+// This will be used as fallback or initial state
+export const sampleNotes: Note[] = [
+  {
+    id: "1",
+    title: "📍 about me",
+    content: "Loading...",
+    date: "7/5/2025",
+    preview: "currently...",
+    isPinned: true,
+    isSelected: true,
+  },
+  {
+    id: "2",
+    title: "🔗 quick links",
+    content: "Loading...",
+    date: "7/5/2025",
+    preview: "useful links",
+    isPinned: false,
+    isSelected: false,
+  },
+];

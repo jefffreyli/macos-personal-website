@@ -17,15 +17,6 @@ function NotPlayingState() {
           <span className="text-xl md:text-2xl">🎵</span>
         </div>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center space-x-2 mb-0.5 md:mb-1">
-            <div className="flex items-center space-x-1">
-              <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-500 rounded-full"></div>
-              <span className="text-gray-400 text-xs md:text-sm font-medium">
-                Not Playing
-              </span>
-            </div>
-          </div>
-
           <h3 className="text-white font-semibold text-base md:text-lg truncate mb-0.5 md:mb-1">
             Nothing currently playing
           </h3>
@@ -33,6 +24,12 @@ function NotPlayingState() {
           <p className="text-gray-400 text-xs md:text-sm truncate mb-0.5 md:mb-1">
             Jeffrey is not listening to anything right now.
           </p>
+        </div>
+        <div className="flex items-center space-x-1 flex-shrink-0">
+          <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-500 rounded-full"></div>
+          <span className="text-gray-400 text-xs md:text-sm font-medium">
+            Not Playing
+          </span>
         </div>
       </div>
     </div>
@@ -73,16 +70,7 @@ export function CurrentSong({ error, data }: CurrentSongProps) {
           </div>
         )}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center space-x-2 mb-0.5 md:mb-1">
-            <div className="flex items-center space-x-1">
-              <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-green-400 text-xs md:text-sm font-medium">
-                Now Playing
-              </span>
-            </div>
-          </div>
-
-          <h3 className="text-white font-semibold text-base md:text-lg truncate mb-0.5 md:mb-1">
+          <h3 className="text-white font-semibold text-base text-md truncate mb-0.5 md:mb-1">
             {track.name}
           </h3>
 
@@ -93,6 +81,12 @@ export function CurrentSong({ error, data }: CurrentSongProps) {
           <p className="text-gray-500 text-[10px] md:text-xs truncate mb-2 md:mb-3">
             {track.album}
           </p>
+        </div>
+        <div className="flex items-center space-x-1 flex-shrink-0">
+          <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-green-500 rounded-full animate-pulse"></div>
+          <span className="text-green-400 text-xs md:text-sm font-medium">
+            Now Playing
+          </span>
         </div>
       </div>
     </div>

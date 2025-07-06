@@ -1,8 +1,11 @@
 "use client";
 
 import { CurrentSong } from "@/components/spotify/CurrentSong";
+import { useSpotify } from "@/hooks/useSpotify";
 
 export function Spotify() {
+  const { data, loading, error } = useSpotify();
+
   return (
     <div className="flex flex-col h-full bg-black text-white">
       <div className="flex-1 min-h-0">
@@ -17,11 +20,7 @@ export function Spotify() {
           style={{ minHeight: "300px", maxHeight: "calc(100vh - 150px)" }}
         />
       </div>
-      <CurrentSong
-        isLoading={false}
-        error={null}
-        data={null}
-      />
+      <CurrentSong isLoading={loading} error={error} data={data} />
     </div>
   );
 }

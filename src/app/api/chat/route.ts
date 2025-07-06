@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { generateChatResponse } from "@/lib/gemini";
 import { ChatApiMessage } from "@/types/chat";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(request: Request) {
   try {
@@ -34,9 +35,35 @@ export async function POST(request: Request) {
       );
     }
 
+    // Get the latest user message (the one we need to save)
+    const latestUserMessage = messages[messages.length - 1];
+
+    // Save the user message to database
+    const savedUserMessage = await prisma.message.create({
+      data: {
+        content: latestUserMessage.content,
+        isBot: false,
+        timestamp: new Date(),
+      },
+    });
+
+    // Generate bot response
     const response = await generateChatResponse(messages);
 
-    return NextResponse.json({ response });
+    // Save the bot response to database
+    const savedBotMessage = await prisma.message.create({
+      data: {
+        content: response,
+        isBot: true,
+        timestamp: new Date(),
+      },
+    });
+
+    return NextResponse.json({
+      response,
+      userMessageId: savedUserMessage.id,
+      botMessageId: savedBotMessage.id,
+    });
   } catch (error) {
     console.error("Chat API Error:", error);
     if (

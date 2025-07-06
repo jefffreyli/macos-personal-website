@@ -39,7 +39,7 @@ export const useChat = (): UseChatReturn => {
         throw new Error(data.error || "Failed to send message");
       }
 
-      return data.response;
+      return data;
     },
     []
   );
@@ -64,7 +64,7 @@ export const useChat = (): UseChatReturn => {
         ]);
 
         // Send to API
-        const botResponse = await sendChatRequest(messageHistory);
+        const responseData = await sendChatRequest(messageHistory);
 
         // Update user message status to sent
         setChatState((prev) => ({
@@ -73,7 +73,7 @@ export const useChat = (): UseChatReturn => {
         }));
 
         // Add bot response
-        const botMessage = createBotMessage(botResponse);
+        const botMessage = createBotMessage(responseData.response);
         setChatState((prev) => ({
           ...prev,
           messages: [...prev.messages, botMessage],
