@@ -143,6 +143,29 @@ export default function Home() {
 
   return (
     <div className="flex h-screen bg-gray-50">
+      {/* Spinning Tree - positioned in top-right corner */}
+      <div className="absolute top-4 right-4 z-50">
+        <svg
+          className="spinning-tree"
+          width="60"
+          height="60"
+          viewBox="0 0 100 100"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {/* Tree foliage */}
+          <circle cx="50" cy="35" r="20" fill="#4ade80" />
+          <circle cx="35" cy="40" r="18" fill="#4ade80" />
+          <circle cx="65" cy="40" r="18" fill="#4ade80" />
+          <circle cx="50" cy="50" r="22" fill="#22c55e" />
+          
+          {/* Tree trunk */}
+          <rect x="44" y="55" width="12" height="25" fill="#92400e" rx="2" />
+          
+          {/* Ground */}
+          <ellipse cx="50" cy="82" rx="30" ry="4" fill="#86efac" opacity="0.5" />
+        </svg>
+      </div>
+      
       <Sidebar notes={notes} onNoteSelect={handleNoteSelect} />
       <div className="flex-1">
         <NoteEditor note={selectedNote} />
