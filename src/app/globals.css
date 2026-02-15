@@ -120,3 +120,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Spinning tree animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinning-tree {
+  animation: spin 4s linear infinite;
+}
